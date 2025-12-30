@@ -16,7 +16,7 @@ const DRAGON_EGGS = [
 
 const CONTRACT_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
 const TOKEN_SYMBOL = "$DRAGON";
-const DEX_SWAP_URL = "https://app.uniswap.org/#/swap";
+const DEX_SWAP_URL = "https://world.org/ecosystem/app_15daccf5b7d4ec9b7dbba044a8fdeab5?path=app%2Ftoken%2F0x96695cD01388E25Fd39Ed5299073b2B4c827bfD2";
 
 const AppLayout: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -195,217 +195,7 @@ const AppLayout: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-emerald-950 to-gray-950 text-white">
-      {/* Swap Modal */}
-      {swapModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={() => setSwapModalOpen(false)}
-          />
-          
-          {/* Modal Content */}
-          <div className="relative w-full max-w-md bg-gradient-to-b from-gray-900 to-gray-950 rounded-3xl border border-emerald-800/50 shadow-2xl shadow-emerald-500/20 overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
-                  <span className="text-lg font-bold">D</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white">Buy {TOKEN_SYMBOL}</h3>
-                  <p className="text-sm text-gray-400">Swap ETH for Dragon tokens</p>
-                </div>
-              </div>
-              <button 
-                onClick={() => setSwapModalOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                <X className="w-5 h-5 text-gray-400" />
-              </button>
-            </div>
-
-            {/* Price Info */}
-            <div className="p-6 border-b border-gray-800">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-400">Current Price</span>
-                <button 
-                  onClick={refreshPrice}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                  disabled={refreshingPrice}
-                >
-                  <RefreshCw className={`w-4 h-4 text-gray-400 ${refreshingPrice ? 'animate-spin' : ''}`} />
-                </button>
-              </div>
-              <div className="flex items-end gap-3">
-                <span className="text-3xl font-bold text-white">
-                  ${tokenPrice.toFixed(10)}
-                </span>
-                <span className={`text-sm font-semibold px-2 py-1 rounded-lg ${
-                  priceChange >= 0 
-                    ? 'text-emerald-400 bg-emerald-500/20' 
-                    : 'text-red-400 bg-red-500/20'
-                }`}>
-                  {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(2)}%
-                </span>
-              </div>
-            </div>
-
-            {/* Contract Address */}
-            <div className="px-6 py-4 bg-gray-900/50">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">Contract Address</span>
-                <button 
-                  onClick={handleCopyContract}
-                  className="flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
-                >
-                  <span className="font-mono">{formatAddress(CONTRACT_ADDRESS)}</span>
-                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Swap Interface */}
-            <div className="p-6 space-y-4">
-              {/* From (ETH) */}
-              <div className="bg-gray-800/50 rounded-2xl p-4 border border-gray-700">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">From</span>
-                  {walletConnected && (
-                    <span className="text-sm text-gray-500">Balance: 0.00 ETH</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="number"
-                    placeholder="0.0"
-                    value={ethAmount}
-                    onChange={(e) => setEthAmount(e.target.value)}
-                    className="flex-1 bg-transparent text-2xl font-bold text-white outline-none placeholder-gray-600"
-                  />
-                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-700 rounded-xl">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                      <span className="text-xs font-bold">Ξ</span>
-                    </div>
-                    <span className="font-semibold">ETH</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Swap Arrow */}
-              <div className="flex justify-center -my-2 relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center">
-                  <ArrowDownUp className="w-5 h-5 text-emerald-400" />
-                </div>
-              </div>
-
-              {/* To (DRAGON) */}
-              <div className="bg-gray-800/50 rounded-2xl p-4 border border-gray-700">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">To (estimated)</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    placeholder="0.0"
-                    value={dragonAmount}
-                    readOnly
-                    className="flex-1 bg-transparent text-2xl font-bold text-white outline-none placeholder-gray-600"
-                  />
-                  <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-600/30 to-green-600/30 border border-emerald-500/30 rounded-xl">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
-                      <span className="text-xs font-bold">D</span>
-                    </div>
-                    <span className="font-semibold text-emerald-400">DRAGON</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Slippage Warning */}
-              <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-                <AlertCircle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                <span className="text-xs text-yellow-500">
-                  Slippage tolerance: 12% | Price impact may vary
-                </span>
-              </div>
-
-              {/* Action Button */}
-              {!walletConnected ? (
-                <button
-                  onClick={connectWallet}
-                  disabled={connecting}
-                  className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl font-bold text-lg hover:from-emerald-500 hover:to-green-500 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {connecting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Connecting...
-                    </>
-                  ) : (
-                    <>
-                      <Wallet className="w-5 h-5" />
-                      Connect Wallet
-                    </>
-                  )}
-                </button>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-sm text-emerald-400">Connected</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-mono text-gray-400">
-                        {formatAddress(walletAddress || '')}
-                      </span>
-                      <button 
-                        onClick={disconnectWallet}
-                        className="text-xs text-red-400 hover:text-red-300"
-                      >
-                        Disconnect
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={handleSwap}
-                    disabled={!ethAmount || swapLoading}
-                    className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl font-bold text-lg hover:from-emerald-500 hover:to-green-500 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {swapLoading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Swapping...
-                      </>
-                    ) : !ethAmount ? (
-                      'Enter an amount'
-                    ) : (
-                      <>
-                        <ArrowDownUp className="w-5 h-5" />
-                        Swap
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-
-              {/* External DEX Link */}
-              <a
-                href={`${DEX_SWAP_URL}?outputCurrency=${CONTRACT_ADDRESS}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-sm text-gray-400 hover:text-emerald-400 transition-colors"
-              >
-                <span>Or swap directly on Uniswap</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-emerald-950 to-gray-950 text-white">    
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-950/90 backdrop-blur-md border-b border-emerald-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -425,12 +215,13 @@ const AppLayout: React.FC = () => {
               <button onClick={() => scrollToSection('eggs')} className="text-gray-300 hover:text-emerald-400 transition-colors">Dragons</button>
               <button onClick={() => scrollToSection('roadmap')} className="text-gray-300 hover:text-emerald-400 transition-colors">Roadmap</button>
               <button onClick={() => scrollToSection('community')} className="text-gray-300 hover:text-emerald-400 transition-colors">Community</button>
-              <button 
-                onClick={() => setSwapModalOpen(true)}
+              <a 
+                href={DEX_SWAP_URL}
+                target="_blank"
                 className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-green-600 rounded-lg font-semibold hover:from-emerald-500 hover:to-green-500 transition-all"
               >
                 Buy Token
-              </button>
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -451,12 +242,13 @@ const AppLayout: React.FC = () => {
               <button onClick={() => scrollToSection('eggs')} className="block w-full text-left text-gray-300 hover:text-emerald-400 py-2">Dragons</button>
               <button onClick={() => scrollToSection('roadmap')} className="block w-full text-left text-gray-300 hover:text-emerald-400 py-2">Roadmap</button>
               <button onClick={() => scrollToSection('community')} className="block w-full text-left text-gray-300 hover:text-emerald-400 py-2">Community</button>
-              <button 
-                onClick={() => { setSwapModalOpen(true); setMobileMenuOpen(false); }}
+              <a 
+                href={DEX_SWAP_URL}
+                target="_blank"
                 className="block w-full text-center px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 rounded-lg font-semibold"
               >
                 Buy Token
-              </button>
+              </a>
             </div>
           </div>
         )}
@@ -507,13 +299,13 @@ const AppLayout: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             {/* Buy Token Button */}
-            <button
+            {/* <button
               onClick={() => setSwapModalOpen(true)}
               className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl font-bold text-lg text-gray-900 hover:from-yellow-400 hover:to-orange-400 transition-all duration-300 shadow-lg shadow-yellow-500/30 hover:shadow-yellow-500/50 hover:scale-105"
             >
               <Wallet className="w-5 h-5" />
               <span>Buy {TOKEN_SYMBOL}</span>
-            </button>
+            </button> */}
 
             {/* Contract Address Button */}
             <button
@@ -879,9 +671,9 @@ const AppLayout: React.FC = () => {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => setSwapModalOpen(true)} className="text-gray-400 hover:text-emerald-400 transition-colors flex items-center gap-2">
+                  <a href={DEX_SWAP_URL} target="_blank" className="text-gray-400 hover:text-emerald-400 transition-colors flex items-center gap-2">
                     Buy {TOKEN_SYMBOL} <Wallet className="w-3 h-3" />
-                  </button>
+                  </a>
                 </li>
               </ul>
             </div>
