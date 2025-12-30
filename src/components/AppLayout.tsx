@@ -550,7 +550,7 @@ const AppLayout: React.FC = () => {
           </div>
 
           {/* Live Price Ticker */}
-          <div className="inline-flex items-center gap-4 px-6 py-3 bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-emerald-800/50">
+          {/* <div className="inline-flex items-center gap-4 px-6 py-3 bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-emerald-800/50">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
                 <span className="text-sm font-bold">D</span>
@@ -564,7 +564,7 @@ const AppLayout: React.FC = () => {
                 {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(2)}% (24h)
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Scroll indicator */}
           <div className="animate-bounce mt-12">
